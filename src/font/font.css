@@ -1,0 +1,11 @@
+@font-face {
+	font-family: "Freesentation";
+	font-weight: normal;
+	src: url("./Freesentation-5Medium.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Freesentation";
+	font-weight: bold;
+	src: url("./Freesentation-7Bold.ttf") format("truetype");
+}
