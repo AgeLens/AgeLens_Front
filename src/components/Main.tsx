@@ -1,6 +1,9 @@
 import React, { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import styled, { keyframes } from "styled-components";
+import useSound from "use-sound";
+/*Assets*/
+import cameraSfx from "../assets/sound/cameraSfx.mp3";
 
 export default function Main() {
 	const [captureEnable, setCaptureEnable] = useState<boolean>(false);
@@ -12,7 +15,9 @@ export default function Main() {
 			setUrl(imageSrc);
 		}
 	}, [webcamRef]);
-	console.log(captureEnable);
+
+	const [cameraPlay] = useSound(cameraSfx);
+
 	return (
 		<AllSection>
 			<Header>
@@ -26,6 +31,7 @@ export default function Main() {
 						onClick={() => {
 							capture();
 							setCaptureEnable(true);
+							cameraPlay();
 						}}
 					></CaptureBtn>
 				</WebCamStyle>
