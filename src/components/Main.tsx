@@ -4,20 +4,64 @@ import styled, { keyframes } from "styled-components";
 import useSound from "use-sound";
 /*Assets*/
 import cameraSfx from "../assets/sound/cameraSfx.mp3";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
+/* 
+http://10.150.151.219:5000/api
+
+보내는 형식
+{
+  "img": "base64 변환한거"
+}
+
+반환 형식
+{
+  "인덱스": "나이(숫자)",
+  ...
+}
+*/
+
+interface ResponseData {
+	data: {
+		age: string | number;
+		img: string;
+	};
+}
 
 export default function Main() {
 	const [captureEnable, setCaptureEnable] = useState<boolean>(false);
-	const webcamRef = useRef<Webcam>(null);
 	const [url, setUrl] = useState<string | null>(null);
-	const capture = useCallback(() => {
+	const [isActiveBtn, setIsActiveBtn] = useState<boolean>(false);
+	const [haveCam, setHaveCam] = useState<boolean>(false);
+	const [data, setData] = useState<{ age: string | number; img: string }>();
+
+	const webcamRef = useRef<Webcam>(null);
+	const capture = () => {
 		const imageSrc = webcamRef.current?.getScreenshot();
 		if (imageSrc) {
+			console.log(imageSrc);
 			setUrl(imageSrc);
+			postUrl(imageSrc);
 		}
-	}, [webcamRef]);
+	};
+	const postUrl = async (src: string) => {
+		setIsActiveBtn(false);
+		await axios
+			.post("http://10.150.151.64:5000/api", {
+				img: src,
+			})
+			.then((response: ResponseData) => {
+				console.log(response.data);
+				setData(response.data);
+				setIsActiveBtn(true);
+			})
+			.then((response) => {
+				// console.log(response);
+			});
+	};
 
 	const [cameraPlay] = useSound(cameraSfx);
-
 	return (
 		<AllSection>
 			<Header>
@@ -26,14 +70,28 @@ export default function Main() {
 			{/* {isCaptureEnable || <button onClick={() => setCaptureEnable(true)}>start</button>} */}
 			<MainSection>
 				<WebCamStyle>
-					<Webcam audio={false} width={800} ref={webcamRef} screenshotFormat="image/jpeg" />
-					<CaptureBtn
-						onClick={() => {
-							capture();
-							setCaptureEnable(true);
-							cameraPlay();
+					<Webcam
+						audio={false}
+						width={800}
+						ref={webcamRef}
+						screenshotFormat="image/jpeg"
+						onUserMedia={() => {
+							setHaveCam(true);
 						}}
-					></CaptureBtn>
+					/>
+					{haveCam ? (
+						<CaptureBtn
+							onClick={() => {
+								capture();
+								setCaptureEnable(true);
+								cameraPlay();
+							}}
+						></CaptureBtn>
+					) : (
+						<NoCamPopUp>
+							<NoCamText>캠이 존재하지 않습니다.</NoCamText>
+						</NoCamPopUp>
+					)}
 				</WebCamStyle>
 				{/* {url && (
 					<WebCamStyle>
@@ -49,7 +107,19 @@ export default function Main() {
 					</PopUpHeader>
 					<div>{url && <PopUpImg src={url} alt="Screenshot" />}</div>
 					<div>
-						<ResultBtn>결과 보기!</ResultBtn>
+						{isActiveBtn ? (
+							<ResultBtn>
+								<Link to="/result" state={{ data: data }} style={{ fontWeight: "bold" }}>
+									결과 보기!
+								</Link>
+							</ResultBtn>
+						) : (
+							<Loading>
+								<div></div>
+								<div></div>
+								<div></div>
+							</Loading>
+						)}
 					</div>
 				</CapturePopUp>
 			) : null}
@@ -57,6 +127,45 @@ export default function Main() {
 	);
 }
 
+// loading animation
+const loadingAnime = keyframes`
+	0%{
+		transform: scaleY(0.6);
+	}
+	30%{
+		transform: scaleY(1.2);
+	}
+	60%{
+		transform: scaleY(0.6);
+	}
+	100%{
+		transform: scaleY(0.6);
+	}
+`;
+
+const Loading = styled.div`
+	padding: 10px;
+	background-color: rgba(255, 255, 255, 0.7);
+	display: flex;
+	gap: 5px;
+	div {
+		width: 8px;
+		height: 35px;
+		background-color: black;
+		animation: ${loadingAnime} 1s ease-in-out infinite;
+	}
+	div:nth-child(1) {
+		animation-delay: 0.2s;
+	}
+	div:nth-child(2) {
+		animation-delay: 0.4s;
+	}
+	div:nth-child(3) {
+		animation-delay: 0.6s;
+	}
+`;
+
+// 전체 CSS 부분
 const AllSection = styled.div`
 	background-color: #475b63;
 	width: 100vw;
@@ -170,4 +279,35 @@ const ResultBtn = styled.button`
 	&:hover {
 		cursor: pointer;
 	}
+	a {
+		color: black;
+		text-decoration: none;
+	}
+`;
+
+const NoCamAnime = keyframes`
+	0%{
+
+	}
+	30%{
+		transform: rotateZ(360deg)
+	}
+	100%{
+		transform: rotateZ(360deg)
+	}
+`;
+
+const NoCamText = styled.span`
+	font-size: 50px;
+	background-color: rgba(1, 1, 1, 0.5);
+	color: #ff3838;
+	animation: ${NoCamAnime} 1s ease-in-out infinite forwards;
+`;
+
+const NoCamPopUp = styled(CapturePopUp)`
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	top: 0px;
+	left: 0px;
 `;

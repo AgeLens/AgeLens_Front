@@ -17,5 +17,5 @@
 		"noEmit": true,
 		"jsx": "react-jsx"
 	},
-	"include": ["src"]
+	"include": ["src", "/@types/svg/index.d.ts", "/@types/sound/index.d.ts"]
 }
