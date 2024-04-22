@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "styled-components";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Result() {
 	const location = useLocation();
@@ -13,12 +13,21 @@ function Result() {
 			<Header>
 				<Title>RKO</Title>
 			</Header>
-			<MainSection>
-				<WebCamStyle>
-					<img src={`data:image/jpg;base64,${img}`} alt="Screenshot" />
-				</WebCamStyle>
-				<ResultText>{formattedAge}</ResultText>
-			</MainSection>
+			{age.key1 === -1 ? (
+				<MainSection>
+					<WebCamStyle>
+						<img src={`data:image/jpg;base64,${img}`} alt="Screenshot" />
+					</WebCamStyle>
+					<ResultText>{formattedAge}</ResultText>
+				</MainSection>
+			) : (
+				<MainSection>
+					<FailDiv>
+						<ResultText>😭사진을 다시 찍어주세요😭</ResultText>
+						<Link to="/">돌아가기</Link>
+					</FailDiv>
+				</MainSection>
+			)}
 		</AllSection>
 	);
 }
@@ -70,4 +79,17 @@ const WebCamStyle = styled.div`
 	display: flex;
 	position: relative;
 	border: 5px solid #2e2c2f;
+`;
+
+const FailDiv = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	a {
+		font-size: 30px;
+		color: #ff9090;
+		text-decoration: none;
+	}
 `;
