@@ -8,8 +8,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 /* 
-http://10.150.151.219:5000/api
-
 보내는 형식
 {
   "img": "base64 변환한거"
