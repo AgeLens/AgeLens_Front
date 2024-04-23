@@ -65,7 +65,7 @@ export default function Main() {
 	return (
 		<AllSection>
 			<Header>
-				<Title>RKO</Title>
+				<Title>나이 측정해드림</Title>
 			</Header>
 			{/* {isCaptureEnable || <button onClick={() => setCaptureEnable(true)}>start</button>} */}
 			<MainSection>
