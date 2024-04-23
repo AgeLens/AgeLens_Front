@@ -65,7 +65,7 @@ export default function Main() {
 	return (
 		<AllSection>
 			<Header>
-				<Title>나이 측정해드림</Title>
+				<Title>{"<--=AgeLens=-->"}</Title>
 			</Header>
 			{/* {isCaptureEnable || <button onClick={() => setCaptureEnable(true)}>start</button>} */}
 			<MainSection>
@@ -167,28 +167,44 @@ const Loading = styled.div`
 
 // 전체 CSS 부분
 const AllSection = styled.div`
-	background-color: #475b63;
+	/* background-color: #363b3b; */
+	background-color: rgba(1, 1, 1, 0.9);
 	width: 100vw;
 	height: 100vh;
 `;
 
 const Title = styled.h1`
-	color: white;
-	font-size: 60px;
+	color: #e9f1f7;
+	font-size: 66px;
 	font-weight: bold;
 	text-align: center;
+	-webkit-text-stroke-width: 2.5px;
+	-webkit-text-stroke-color: black;
+`;
+
+const hBorderAnime = keyframes`
+	0%{
+		border-color: rgba(255, 255, 255, 0.8);
+	}
+	50%{
+		border-color: rgba(255, 255, 255, 0.2);
+	}
+	100%{
+		border-color: rgba(255, 255, 255, 0.8);
+	}
 `;
 
 const Header = styled.header`
 	width: 100%;
 	height: 15%;
-	background-color: rgba(255, 255, 255, 0.2);
+	background-color: rgba(255, 255, 255, 0.1);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	border-top: 2px solid white;
 	border-bottom: 2px solid white;
 	box-sizing: border-box;
+	animation: ${hBorderAnime} 5s linear infinite forwards;
 `;
 
 const MainSection = styled.div`
@@ -220,7 +236,8 @@ const CaptureBtn = styled.div`
 const WebCamStyle = styled.div`
 	display: flex;
 	position: relative;
-	border: 5px solid #2e2c2f;
+	border: 5px solid rgba(255, 255, 255, 0.6);
+	animation: ${hBorderAnime} 5s linear infinite forwards;
 `;
 
 const PopUpStartAnim = keyframes`
