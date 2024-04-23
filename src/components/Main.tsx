@@ -46,7 +46,7 @@ export default function Main() {
 	const postUrl = async (src: string) => {
 		setIsActiveBtn(false);
 		await axios
-			.post("http://10.150.151.64:5000/api", {
+			.post("http://10.150.150.209:5000/api", {
 				img: src,
 			})
 			.then((response: ResponseData) => {

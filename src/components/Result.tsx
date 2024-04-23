@@ -90,6 +90,7 @@ const MainSection = styled.div`
 `;
 
 const TextSection = styled.div`
+	max-width: 500px;
 	display: flex;
 	flex-direction: column;
 	padding: 30px 30px;
