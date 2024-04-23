@@ -13,7 +13,7 @@ function Result() {
 			<Header>
 				<Title>RKO</Title>
 			</Header>
-			{age.key1 === -1 ? (
+			{age.key1 !== -1 ? (
 				<MainSection>
 					<WebCamStyle>
 						<img src={`data:image/jpg;base64,${img}`} alt="Screenshot" />
